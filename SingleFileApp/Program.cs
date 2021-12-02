@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using Microsoft.AspNetCore;
 
 namespace SingleFileApp
 {
@@ -18,16 +19,16 @@ namespace SingleFileApp
                     .OrderByDescending(di => di.LastWriteTime)
                     .First();
 
-            CreateHostBuilder(args)
-                .UseContentRoot(directory.FullName)
+            CreateHostBuilder(args, directory.FullName)
                 .Build()
                 .Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args, string contentRootPath) =>
             Host.CreateDefaultBuilder(args)            
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseContentRoot(contentRootPath);
                     webBuilder.UseStartup<Startup>();
                 });
     }

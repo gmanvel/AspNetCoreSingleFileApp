@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 namespace SingleFileApp
 {
@@ -39,7 +40,12 @@ namespace SingleFileApp
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new EmbeddedFileProvider(
+                    assembly: typeof(Startup).Assembly, 
+                    baseNamespace: "SingleFileApp.wwwroot"),
+            });
 
             app.UseRouting();
 

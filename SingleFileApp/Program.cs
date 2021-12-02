@@ -1,8 +1,5 @@
-using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System.IO;
-using Microsoft.AspNetCore;
 
 namespace SingleFileApp
 {
@@ -10,25 +7,15 @@ namespace SingleFileApp
     {
         public static void Main(string[] args)
         {
-            var path = Path.Combine(Path.GetTempPath(), ".net", typeof(Program).Assembly.GetName().Name);
-
-            var directory = 
-                Directory
-                    .GetDirectories(path)
-                    .Select(path => new DirectoryInfo(path))
-                    .OrderByDescending(di => di.LastWriteTime)
-                    .First();
-
-            CreateHostBuilder(args, directory.FullName)
+            CreateHostBuilder(args)
                 .Build()
                 .Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args, string contentRootPath) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)            
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseContentRoot(contentRootPath);
                     webBuilder.UseStartup<Startup>();
                 });
     }
